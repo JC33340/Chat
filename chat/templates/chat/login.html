@@ -1,0 +1,29 @@
+{% extends "chat/layout.html" %}
+{% load static %}
+
+{% block title %}
+    <title>Login</title>
+    <link href = "{% static 'chat/LoginRegister.css' %}" rel = "stylesheet">
+{% endblock %}
+
+{% block body %}
+<div id = "login-form-wrapper-div">
+    <span>Login:</span><br>
+    <div id = "message-wrapper-div">
+        {% if message %}
+        {{message}}
+        {% endif %}
+    </div>
+    <form action = "{% url 'login_view' %}" method = "post">
+        {% csrf_token %}
+        <div class = "form-group" >
+            <input class = "form-control" type = "text" placeholder = "Username" autocomplete="off" name = "username">
+        </div>
+        <div class = "form-group">
+            <input class = "form-control" type = "password" placeholder = "Password" autocomplete="off" name = "password">
+        </div>
+        <button type = "submit">Sign in</button>        
+    </form>
+</div>
+
+{% endblock %}

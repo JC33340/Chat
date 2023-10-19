@@ -1,0 +1,33 @@
+{% extends "chat/layout.html" %}
+{% load static %}
+
+{% block title %}
+<title>Register</title>
+<link href = "{% static 'chat/LoginRegister.css' %}" rel = "stylesheet">
+{% endblock %}
+
+{% block body %}
+
+<div id = "register-form-wrapper-div">
+    <span>Register</span>
+    <div id = "message-wrapper-div">
+        {% if message %}
+        {{message}}
+        {% endif %}
+    </div>
+    <form action = "{% url 'register' %}" method = "post">
+        {% csrf_token %}
+        <div class = "form-group" >
+            <input class = "form-control" type = "text" placeholder = "Username" autocomplete="off" name = "username">
+        </div>
+        <div class = "form-group">
+            <input class = "form-control" type = "password" placeholder = "Password" autocomplete="off" name = "password">
+        </div>
+        <div class = "form-group">
+            <input class = "form-control" type = "password" placeholder = "Confirm Password" autocomplete="off" name = "password_confirmation">
+        </div>
+        <button type = "submit">Register</button>   
+    </form>
+</div>
+
+{% endblock %}
