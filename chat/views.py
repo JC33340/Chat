@@ -2,13 +2,16 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 from .models import User
 # Create your views here.
 
-
+@login_required(login_url='login')
 def index(request):
     return render(request, "chat/index.html")
+
+
 
 def login_view(request):
     if request.method == "GET":
@@ -49,3 +52,12 @@ def register(request):
             })
 
         return render(request, "chat/login.html")
+    
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
+
+def chat_room(request, room_name):
+    return render(request, "chat/chatRoom.html", {
+        "room_name": room_name
+    })

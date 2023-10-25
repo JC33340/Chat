@@ -14,7 +14,7 @@
         {{message}}
         {% endif %}
     </div>
-    <form action = "{% url 'login_view' %}" method = "post">
+    <form action = "{% url 'login' %}" method = "post">
         {% csrf_token %}
         <div class = "form-group" >
             <input class = "form-control" type = "text" placeholder = "Username" autocomplete="off" name = "username">

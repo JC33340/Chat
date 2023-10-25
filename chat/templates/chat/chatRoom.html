@@ -1,0 +1,14 @@
+{% extends "chat/layout.html" %}
+{% load static %}
+
+{% block title %}
+<title>Chat</title>
+<script src = "{% static 'chat/chatRoom.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+<input id = "chat_message_input" type = "text">
+<button type = "submit" id = "chat_message_submit">Send</button>
+<textarea id = "chat_log" cols = "100" rows = "20"></textarea>
+{{ room_name|json_script:"room_name" }}
+{% endblock %}
