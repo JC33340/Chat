@@ -4,6 +4,19 @@
 {% block title %}
 <title>Index</title>
 <link href = '{% static "chat/index.css" %}' rel = "stylesheet">
+<script src = "{% static 'chat/index.js' %}"></script>
 {% endblock %}
 
-{% block body %}<span>HELLO</span>{% endblock %}
+{% block body %}
+<div class = "main-wrapper-div">
+    <div id = "search_chat_wrapper_div">
+        <h3>Chats Currently Live</h3>
+        <button id = "search_chats_button">Search chats</button>
+        <div id = "current_live_chats_div"></div>
+    </div>
+    <div id = "create_chat_wrapper_div">
+        <h1>Create a chat Room</h1>
+    </div>
+</div>
+
+{% endblock %}

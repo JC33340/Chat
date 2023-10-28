@@ -9,6 +9,7 @@
 {% block body %}
 <input id = "chat_message_input" type = "text">
 <button type = "submit" id = "chat_message_submit">Send</button>
-<textarea id = "chat_log" cols = "100" rows = "20"></textarea>
+<button type = "submit" id = "chat_close_button">Close</button>
+<textarea id = "chat_log" cols = "100" rows = "20" readonly></textarea>
 {{ room_name|json_script:"room_name" }}
 {% endblock %}

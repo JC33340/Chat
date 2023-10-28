@@ -5,3 +5,6 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     pass
+
+class LiveChats(models.Model):
+    room_name = models.CharField(max_length=25)

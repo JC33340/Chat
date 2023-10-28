@@ -2,6 +2,7 @@ import json
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
+from .models import LiveChats
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -10,8 +11,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         #join group
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
-
         await self.accept()
+
 
     async def disconnect(self, close_code):
         # leave room group
