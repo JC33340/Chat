@@ -2,9 +2,12 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+import json
 
-from .models import User
+from .models import User, LiveChats
 # Create your views here.
 
 @login_required(login_url='login')
@@ -61,3 +64,15 @@ def chat_room(request, room_name):
     return render(request, "chat/chatRoom.html", {
         "room_name": room_name
     })
+
+@csrf_exempt
+def create_chat(request):
+    if request.method == "POST": 
+        data = json.loads(request.body)
+
+        x = LiveChats.objects.filter(room_name = data["chat_name"])
+        if len(x) != 1:
+            LiveChats.objects.create(room_name = data["chat_name"], creator = request.user)
+            return JsonResponse ({"available": "yes"})
+        else:
+            return JsonResponse ({"available": "no"})

@@ -9,5 +9,8 @@ urlpatterns = [
     path("logout", views.logout_view, name = "logout"), 
 
     #chat urls
-    path("chat/<str:room_name>", views.chat_room, name = "chat_room")
+    path("chat/<str:room_name>", views.chat_room, name = "chat_room"),
+
+    #API
+    path("create_chat", views.create_chat, name = "create_chat")
 ]

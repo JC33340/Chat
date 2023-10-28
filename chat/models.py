@@ -8,3 +8,5 @@ class User(AbstractUser):
 
 class LiveChats(models.Model):
     room_name = models.CharField(max_length=25)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    
