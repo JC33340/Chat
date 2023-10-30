@@ -14,6 +14,15 @@ document.addEventListener("DOMContentLoaded", ()=>{
     document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #create-chat-button").addEventListener("click", ()=>{
         create_chat()
     })
+
+    //adding functionality to public and private buttons
+    document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #public-chat-state-button").addEventListener("click", ()=>{
+        change_create_chat_state("public");
+    })
+
+    document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #private-chat-state-button").addEventListener("click", ()=>{
+        change_create_chat_state("private");
+    })
 })
 
 // clearing all visible divs to start clean
@@ -28,6 +37,15 @@ async function create_chat(){
     const chat_name_input = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #chat_name");
     const chat_name = chat_name_input.value;
     const error_p = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div .error-div")
+    const success_p = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div .success-div")
+
+    //private chat room coding
+    let chat_state = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #create-chat-button").getAttribute("chat_type")
+    const chat_password_input = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #chat_password")
+    const chat_password = chat_password_input.value
+    console.log(chat_state);
+
+    console.log(chat_password)
     error_p.innerHTML = "";
     if (chat_name === ""){
         error_p.innerHTML = "Enter Valid Chat Name"
@@ -37,15 +55,36 @@ async function create_chat(){
         let data_json = await fetch("create_chat", {
             method: "post",
             body: JSON.stringify({
-                chat_name: chat_name
+                chat_name: chat_name,
+                chat_state: chat_state,
+                chat_password: chat_password,
             })
         })
         let data = await data_json.json();
         const available = data.available;
         if (available === "yes"){
-            error_p.innerHTML = "Chat Created"
+            success_p.innerHTML = "Chat Created"
         } else if (available === "no"){
             error_p.innerHTML = "Name Already Taken"
         }
+    }
+}
+
+function change_create_chat_state(state){
+    let private_button = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #private-chat-state-button");
+    let public_button = document.querySelector(" body .main-wrapper-div #create_chat_wrapper_div #public-chat-state-button");
+    let create_chat_button = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #create-chat-button");
+    let password_input = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #chat_password");
+    private_button.classList.remove("active-button");
+    public_button.classList.remove("active-button");
+
+    if (state === "public"){
+        public_button.classList.add("active-button")
+        create_chat_button.setAttribute("chat_type", "public")
+        password_input.style.visibility = "hidden";
+    } else {
+        private_button.classList.add("active-button")
+        create_chat_button.setAttribute("chat_type", "private")
+        password_input.style.visibility = "visible";
     }
 }

@@ -15,11 +15,17 @@
         <div id = "current_live_chats_div"></div>
     </div>
     <div id = "create_chat_wrapper_div">
-        <h1>Create a chat Room</h1>
+        <h1>Create a chat room</h1>
         <p class = "error-div"></p>
+        <p class = "success-div"></p>
         <input id = "chat_name" class = "form-control" type = "text" placeholder="Chat Name" autofocus autocomplete="off">
         <br>
-        <button id = "create-chat-button">Create</button>
+        <input id = "chat_password" class = "form-control" type = "text" placeholder="Password" autofocus autocomplete="off" style="visibility:hidden">
+        <br>
+        <button class = "active-button" id = "public-chat-state-button">Public</button>
+        <button id = "private-chat-state-button">Private</button>
+        <br>
+        <button id = "create-chat-button" chat_type = "public">Create</button>
     </div>
 </div>
 

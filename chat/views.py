@@ -71,6 +71,7 @@ def create_chat(request):
         data = json.loads(request.body)
 
         x = LiveChats.objects.filter(room_name = data["chat_name"])
+        print(data["chat_state"], data["chat_password"])
         if len(x) != 1:
             LiveChats.objects.create(room_name = data["chat_name"], creator = request.user)
             return JsonResponse ({"available": "yes"})

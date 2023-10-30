@@ -2,3 +2,25 @@
     text-align: center;
     padding: 20px;
 }
+
+.main-wrapper-div #create_chat_wrapper_div .error-div, .main-wrapper-div #create_chat_wrapper_div .success-div{
+    font-weight: bold;
+}
+
+.main-wrapper-div #create_chat_wrapper_div .error-div{
+    color: red;
+}
+
+.main-wrapper-div #create_chat_wrapper_div .success-div{
+    color: green;
+}
+
+.main-wrapper-div #create_chat_wrapper_div #create-chat-button{
+    margin-top: 0.75em;
+}
+
+.active-button{
+    background-color: black;
+    color: white;
+}
+
