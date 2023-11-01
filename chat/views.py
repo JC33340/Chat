@@ -71,9 +71,11 @@ def create_chat(request):
         data = json.loads(request.body)
 
         x = LiveChats.objects.filter(room_name = data["chat_name"])
-        print(data["chat_state"], data["chat_password"])
         if len(x) != 1:
-            LiveChats.objects.create(room_name = data["chat_name"], creator = request.user)
+            if data["chat_state"] == "public":
+                LiveChats.objects.create(room_name = data["chat_name"], creator = request.user,state="public", password = None)
+            elif data["chat_state"] == "private":
+                LiveChats.objects.create(room_name = data["chat_name"], creator = request.user,state="private", password = data["chat_password"])
             return JsonResponse ({"available": "yes"})
         else:
             return JsonResponse ({"available": "no"})
