@@ -16,4 +16,5 @@ class LiveChats(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE)
     state = models.CharField(max_length=7, choices = LiveChatState_choices, default="public")
     password = models.CharField(max_length=10, default=None, blank=True)
+    category = models.CharField(max_length=20)
     

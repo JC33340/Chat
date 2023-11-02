@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     // initial index load
     clear_divs();
-    document.getElementById("search_chat_wrapper_div").style.display = "block";
+    load_search_chat_div();
+    
 
     //adding functioning button which directs user to create a chat
     document.getElementById("create_chat_navbar_link").addEventListener("click", ()=>{
@@ -43,12 +44,18 @@ async function create_chat(){
     let chat_state = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #create-chat-button").getAttribute("chat_type")
     const chat_password_input = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #chat_password")
     const chat_password = chat_password_input.value
-    console.log(chat_state);
+    chat_password_input.value = "";
+
+
+    //getting chat category
+    const chat_category = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #chat_category")
+    const chat_category_value = chat_category.value
+    chat_category.value = "";
 
     console.log(chat_password)
     error_p.innerHTML = "";
-    if (chat_name === ""){
-        error_p.innerHTML = "Enter Valid Chat Name"
+    if (chat_name === "" || chat_category_value === ""){
+        error_p.innerHTML = "Fill in required field"
     } else{
         chat_name_input.value = "";
 
@@ -58,6 +65,7 @@ async function create_chat(){
                 chat_name: chat_name,
                 chat_state: chat_state,
                 chat_password: chat_password,
+                chat_category:chat_category_value
             })
         })
         let data = await data_json.json();
@@ -87,4 +95,8 @@ function change_create_chat_state(state){
         create_chat_button.setAttribute("chat_type", "private")
         password_input.style.visibility = "visible";
     }
+}
+
+    function load_search_chat_div(){
+        document.getElementById("search_chat_wrapper_div").style.display = "block";
 }

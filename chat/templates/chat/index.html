@@ -10,7 +10,7 @@
 {% block body %}
 <div class = "main-wrapper-div">
     <div id = "search_chat_wrapper_div">
-        <h3>Chats Currently Live</h3>
+        <h3>Browse Chats</h3>
         <button id = "search_chats_button">Search chats</button>
         <div id = "current_live_chats_div"></div>
     </div>
@@ -20,7 +20,9 @@
         <p class = "success-div"></p>
         <input id = "chat_name" class = "form-control" type = "text" placeholder="Chat Name" autofocus autocomplete="off">
         <br>
-        <input id = "chat_password" class = "form-control" type = "text" placeholder="Password" autofocus autocomplete="off" style="visibility:hidden" maxlength="20">
+        <input id = "chat_category" class = "form-control" type = "text" placeholder="Category" autocomplete="off">
+        <br>
+        <input id = "chat_password" class = "form-control" type = "text" placeholder="Password" autocomplete="off" style="visibility:hidden" maxlength="20">
         <br>
         <button class = "active-button" id = "public-chat-state-button">Public</button>
         <button id = "private-chat-state-button">Private</button>

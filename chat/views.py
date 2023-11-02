@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 import json
 
@@ -61,6 +62,12 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("index"))
 
 def chat_room(request, room_name):
+    try:
+        room_data = LiveChats.objects.get(room_name = room_name)
+    except ObjectDoesNotExist:
+        return render(request, "chat/error.html",{
+            "message": "Room Does Not Exist"
+        })
     return render(request, "chat/chatRoom.html", {
         "room_name": room_name
     })
@@ -69,13 +76,13 @@ def chat_room(request, room_name):
 def create_chat(request):
     if request.method == "POST": 
         data = json.loads(request.body)
-
+        print(data["chat_category"])
         x = LiveChats.objects.filter(room_name = data["chat_name"])
         if len(x) != 1:
             if data["chat_state"] == "public":
-                LiveChats.objects.create(room_name = data["chat_name"], creator = request.user,state="public", password = None)
+                LiveChats.objects.create(room_name = data["chat_name"], creator = request.user,state="public", password = "", category = data["chat_category"])
             elif data["chat_state"] == "private":
-                LiveChats.objects.create(room_name = data["chat_name"], creator = request.user,state="private", password = data["chat_password"])
+                LiveChats.objects.create(room_name = data["chat_name"], creator = request.user,state="private", password = data["chat_password"], category = data["chat_category"])
             return JsonResponse ({"available": "yes"})
         else:
             return JsonResponse ({"available": "no"})
