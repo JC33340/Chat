@@ -61,16 +61,36 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
+@csrf_exempt
 def chat_room(request, room_name):
-    try:
-        room_data = LiveChats.objects.get(room_name = room_name)
-    except ObjectDoesNotExist:
-        return render(request, "chat/error.html",{
-            "message": "Room Does Not Exist"
+    if request.method == "GET":
+        try:
+            room_data = LiveChats.objects.filter(room_name = room_name).values()[0]
+        except IndexError:
+            return render(request, "chat/error.html",{
+                "message": "Room Does Not Exist"
+            })
+        try:
+            password = request.session[f'chat_room_{room_data["room_name"]}']
+        except KeyError:
+            return render(request, "chat/chat_login.html",{
+                "room_name":room_data["room_name"]
+            })
+        return render(request, "chat/chatRoom.html", {
+            "room_name": room_name
         })
-    return render(request, "chat/chatRoom.html", {
-        "room_name": room_name
-    })
+    elif request.method == "POST":
+        data = json.loads(request.body)
+        entered_password = data["password"]
+        room_name = data["room_name"]
+        chat_password = LiveChats.objects.filter(room_name = room_name).values()[0]["password"]
+        print(entered_password,chat_password)
+        if entered_password == chat_password:
+            request.session[f'chat_room_{room_name}'] = entered_password
+            return JsonResponse({"password":True})
+        else:
+            return JsonResponse({"password":False})
+        
 
 @csrf_exempt
 def create_chat(request):
@@ -86,3 +106,4 @@ def create_chat(request):
             return JsonResponse ({"available": "yes"})
         else:
             return JsonResponse ({"available": "no"})
+        

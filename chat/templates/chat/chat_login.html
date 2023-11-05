@@ -1,0 +1,46 @@
+{% extends 'chat/layout.html' %}
+{% load static %}
+
+{% block title %}
+<title>Chat Login</title>
+<style>
+    .main-wrapper{
+        text-align: center;
+        padding: 10px;
+    }
+    .title-wrapper{
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .title-wrapper #room_name_span{
+        color: blue;
+    }
+    .form-wrapper-div{
+        margin-top: 10px;
+    }
+    .main-wrapper form {
+        display: inline;
+    }
+</style>
+<script src = "{% static 'chat/chat_login.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+<div class = "main-wrapper">
+    <div class = "title-wrapper">
+        <span>Chat room: <span id = "room_name_span">{{room_name}}</span> requires a password</span>
+    </div>
+    <div class = "error-div">{{message}}</div>
+    <div class = "form-wrapper-div">
+        <div id = "error-div"></div>
+        <form>
+            <input id = "chat_password" type = "password" placeholder="Chat password" autofocus autocomplete="off" name = "chat_password">
+            <button id = "submit-button">Submit</button>
+        </form>
+        
+        
+    </div>
+</div>
+
+{{room_name|json_script:"room_name"}}
+{% endblock %}
