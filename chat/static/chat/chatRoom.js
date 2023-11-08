@@ -36,10 +36,4 @@ document.addEventListener("DOMContentLoaded", ()=>{
         }))
         chat_message_input.value = '';
     })
-
-    const chat_close_button = document.querySelector("#chat_close_button")
-    chat_close_button.addEventListener("click", ()=>{
-        chatSocket.close()
-    })
-
 })

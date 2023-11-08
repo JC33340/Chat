@@ -24,6 +24,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
     document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #private-chat-state-button").addEventListener("click", ()=>{
         change_create_chat_state("private");
     })
+
+    document.getElementById("refresh-button").addEventListener("click", ()=>{
+        location.reload()
+    })
 })
 
 // clearing all visible divs to start clean
@@ -97,6 +101,46 @@ function change_create_chat_state(state){
     }
 }
 
-    function load_search_chat_div(){
-        document.getElementById("search_chat_wrapper_div").style.display = "block";
+//fetching data from server and generating a list of all the chats currently online
+async function load_search_chat_div(){
+    document.getElementById("search_chat_wrapper_div").style.display = "block";
+    const chatroom_data_json = await fetch("chat_room_info",{
+        method: "get"
+    })
+    let chatroom_data = await chatroom_data_json.json()
+    chatroom_data = chatroom_data.info
+    console.log(chatroom_data);
+    const current_live_chats_div = document.getElementById("current_live_chats_div")
+    for (i=0;i<chatroom_data.length;i++){
+        let wrapper_div = document.createElement("div")
+        wrapper_div.classList.add("individual-chat-wrapper-div")
+
+        let first_div = document.createElement("div")
+        first_div.classList.add("individual-chat-wrapper-div-divisions")
+        let second_div = document.createElement("div")
+        second_div.classList.add("individual-chat-wrapper-div-divisions")
+
+        let title_b = document.createElement("b");
+        let creator_p = document.createElement("p");
+
+        let join_button_wrap = document.createElement("a");
+        join_button_wrap.setAttribute("href", `/chat/${chatroom_data[i].room_name}`)
+        let join_button = document.createElement("button");
+        join_button.innerHTML = "Join Room"
+        join_button_wrap.append(join_button)
+
+        title_b.innerHTML = `${chatroom_data[i].room_name}`
+        creator_p.innerHTML = `Created by: ${chatroom_data[i].creator_id}`
+        
+        let type_p = document.createElement("p");
+        let category_p = document.createElement("p");
+        type_p.innerHTML = `Type: ${chatroom_data[i].state}`
+        category_p.innerHTML = `Category: ${chatroom_data[i].category}`
+
+        first_div.append(title_b,creator_p,join_button_wrap)
+        second_div.append(type_p,category_p)
+        
+        wrapper_div.append(first_div,second_div)
+        current_live_chats_div.append(wrapper_div)
+    }
 }

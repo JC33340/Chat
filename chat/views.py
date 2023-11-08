@@ -70,15 +70,25 @@ def chat_room(request, room_name):
             return render(request, "chat/error.html",{
                 "message": "Room Does Not Exist"
             })
-        try:
-            password = request.session[f'chat_room_{room_data["room_name"]}']
-        except KeyError:
-            return render(request, "chat/chat_login.html",{
-                "room_name":room_data["room_name"]
+        creator = User.objects.get(id=room_data["creator_id"])
+        if room_data["state"] == "private":
+            if request.user == creator:
+                return render(request, 'chat/chatRoom.html',{
+                    "room_name":room_name
+                })
+            try:
+                password = request.session[f'chat_room_{room_data["room_name"]}']
+            except KeyError:
+                return render(request, "chat/chat_login.html",{
+                    "room_name":room_data["room_name"]
+                })
+            return render(request, "chat/chatRoom.html", {
+                "room_name": room_name
             })
-        return render(request, "chat/chatRoom.html", {
-            "room_name": room_name
-        })
+        elif room_data["state"] == "public":
+            return render(request, "chat/chatRoom.html", {
+                "room_name": room_name
+            })
     elif request.method == "POST":
         data = json.loads(request.body)
         entered_password = data["password"]
@@ -106,4 +116,14 @@ def create_chat(request):
             return JsonResponse ({"available": "yes"})
         else:
             return JsonResponse ({"available": "no"})
+        
+def chat_room_info(request):
+    all_chats_data = LiveChats.objects.all().values()
+    all_chats = []
+    for chat in all_chats_data:
+        creator_username = User.objects.filter(id = chat["creator_id"]).values()[0]["username"]
+        chat["creator_id"] = creator_username
+        all_chats.append(chat)
+
+    return JsonResponse({"info":all_chats})
         

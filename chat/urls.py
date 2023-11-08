@@ -12,5 +12,6 @@ urlpatterns = [
     path("chat/<str:room_name>", views.chat_room, name = "chat_room"),
 
     #API
-    path("create_chat", views.create_chat, name = "create_chat")
+    path("create_chat", views.create_chat, name = "create_chat"),
+    path("chat_room_info", views.chat_room_info, name = "chat_room_info")
 ]
