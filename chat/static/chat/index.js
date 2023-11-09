@@ -28,11 +28,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
     document.getElementById("refresh-button").addEventListener("click", ()=>{
         location.reload()
     })
+    
+    //my chats page
+    document.getElementById("my_chats_navbar_link").addEventListener("click", ()=>{
+        load_my_chats_page();
+    })
 })
 
 // clearing all visible divs to start clean
 function clear_divs(){
-    document.querySelectorAll("#search_chat_wrapper_div, #create_chat_wrapper_div").forEach(div => {
+    document.querySelectorAll("#search_chat_wrapper_div, #create_chat_wrapper_div, #my_chats_wrapper_div").forEach(div => {
         div.style.display = "none";
     })
 }
@@ -111,6 +116,12 @@ async function load_search_chat_div(){
     chatroom_data = chatroom_data.info
     console.log(chatroom_data);
     const current_live_chats_div = document.getElementById("current_live_chats_div")
+    load_div_data(current_live_chats_div, chatroom_data)
+}
+
+//general chat div loading function
+function load_div_data(overall_wrapper_div, chatroom_data){
+    console.log(overall_wrapper_div,chatroom_data)
     for (i=0;i<chatroom_data.length;i++){
         let wrapper_div = document.createElement("div")
         wrapper_div.classList.add("individual-chat-wrapper-div")
@@ -141,6 +152,18 @@ async function load_search_chat_div(){
         second_div.append(type_p,category_p)
         
         wrapper_div.append(first_div,second_div)
-        current_live_chats_div.append(wrapper_div)
+        overall_wrapper_div.append(wrapper_div)
     }
+}
+
+async function load_my_chats_page(){
+    clear_divs();
+    document.querySelector("#my_chats_wrapper_div").style.display = "block";
+    const my_chats_wrapper_div = document.querySelector("#current_my_chats_div");
+    my_chats_wrapper_div.innerHTML = "";
+
+    let my_chat_data_json = await fetch("my_chats_info")
+    let my_chats_data = await my_chat_data_json.json()
+    console.log(my_chats_data)
+    load_div_data(my_chats_wrapper_div, my_chats_data.data)
 }

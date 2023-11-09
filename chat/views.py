@@ -126,4 +126,14 @@ def chat_room_info(request):
         all_chats.append(chat)
 
     return JsonResponse({"info":all_chats})
+
+def my_chats_info(request):
+    my_chats_data = LiveChats.objects.filter(creator = request.user).values()
+    my_chats_data_list = []
+    for chat in my_chats_data:
+        creator_username = User.objects.filter(id = chat["creator_id"]).values()[0]["username"]
+        chat["creator_id"] = creator_username
+        my_chats_data_list.append(chat)
+    print(my_chats_data_list)
+    return JsonResponse({"data":my_chats_data_list})
         

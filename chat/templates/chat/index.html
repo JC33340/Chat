@@ -11,6 +11,7 @@
 <div class = "main-wrapper-div">
     <div id = "search_chat_wrapper_div">
         <h3>Browse Chats</h3>
+        <h6>{{request.user}}</h6>
         <button id = "search_chats_button">Search chats</button>
         <button id = "refresh-button">Refresh</button>
         <div id = "current_live_chats_div"></div>
@@ -29,6 +30,10 @@
         <button id = "private-chat-state-button">Private</button>
         <br>
         <button id = "create-chat-button" chat_type = "public">Create</button>
+    </div>
+    <div id = "my_chats_wrapper_div">
+        <h1>My Chats</h1>
+        <div id = "current_my_chats_div"></div>
     </div>
 </div>
 

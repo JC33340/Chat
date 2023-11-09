@@ -13,5 +13,6 @@ urlpatterns = [
 
     #API
     path("create_chat", views.create_chat, name = "create_chat"),
-    path("chat_room_info", views.chat_room_info, name = "chat_room_info")
+    path("chat_room_info", views.chat_room_info, name = "chat_room_info"),
+    path("my_chats_info", views.my_chats_info, name = "my_chats_info")
 ]
