@@ -116,11 +116,11 @@ async function load_search_chat_div(){
     chatroom_data = chatroom_data.info
     console.log(chatroom_data);
     const current_live_chats_div = document.getElementById("current_live_chats_div")
-    load_div_data(current_live_chats_div, chatroom_data)
+    load_div_data(current_live_chats_div, chatroom_data,"search_div")
 }
 
 //general chat div loading function
-function load_div_data(overall_wrapper_div, chatroom_data){
+function load_div_data(overall_wrapper_div, chatroom_data, page_type){
     console.log(overall_wrapper_div,chatroom_data)
     for (i=0;i<chatroom_data.length;i++){
         let wrapper_div = document.createElement("div")
@@ -148,8 +148,19 @@ function load_div_data(overall_wrapper_div, chatroom_data){
         type_p.innerHTML = `Type: ${chatroom_data[i].state}`
         category_p.innerHTML = `Category: ${chatroom_data[i].category}`
 
+        //adding my chats removing the chat page
+        let remove_button = ""
+        if (page_type === "my_chats"){
+            remove_button = document.createElement("button");
+            remove_button.innerHTML = "Close Chat"
+            const room_name = chatroom_data[i].room_name
+            remove_button.addEventListener("click", ()=>{
+                remove_chat(room_name)
+            })
+        }
+        
         first_div.append(title_b,creator_p,join_button_wrap)
-        second_div.append(type_p,category_p)
+        second_div.append(type_p,category_p,remove_button)
         
         wrapper_div.append(first_div,second_div)
         overall_wrapper_div.append(wrapper_div)
@@ -165,5 +176,16 @@ async function load_my_chats_page(){
     let my_chat_data_json = await fetch("my_chats_info")
     let my_chats_data = await my_chat_data_json.json()
     console.log(my_chats_data)
-    load_div_data(my_chats_wrapper_div, my_chats_data.data)
+    load_div_data(my_chats_wrapper_div, my_chats_data.data, "my_chats")
+}
+
+async function remove_chat(room_name){
+    let remove_chat_outcome_json = await fetch("remove_chat",{
+        method: "post",
+        body : JSON.stringify({
+            room_name: room_name
+        })
+    })
+    let remove_chat_outcome = await remove_chat_outcome_json.json();
+    console.log(remove_chat_outcome)
 }

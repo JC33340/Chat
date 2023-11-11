@@ -136,4 +136,13 @@ def my_chats_info(request):
         my_chats_data_list.append(chat)
     print(my_chats_data_list)
     return JsonResponse({"data":my_chats_data_list})
+
+@csrf_exempt
+def remove_chat(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        room_name = data["room_name"]
+        LiveChats.objects.get(room_name = room_name).delete()
+        return JsonResponse({"Outcome":"success"})
+    return JsonResponse({"Outcome":"Incorrect method"})
         
