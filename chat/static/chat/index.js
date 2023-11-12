@@ -48,7 +48,11 @@ async function create_chat(){
     const chat_name = chat_name_input.value;
     const error_p = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div .error-div")
     const success_p = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div .success-div")
-
+    //ensuring chat room doesnt have white space in name
+    if (checkwhitespace(chat_name)){
+        error_p.innerHTML = "Room name cannot have spaces"
+        return
+    }
     //private chat room coding
     let chat_state = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #create-chat-button").getAttribute("chat_type")
     const chat_password_input = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #chat_password")
@@ -85,6 +89,10 @@ async function create_chat(){
             error_p.innerHTML = "Name Already Taken"
         }
     }
+}
+
+function checkwhitespace(string){
+    return /\s/.test(string)
 }
 
 function change_create_chat_state(state){
@@ -187,5 +195,5 @@ async function remove_chat(room_name){
         })
     })
     let remove_chat_outcome = await remove_chat_outcome_json.json();
-    console.log(remove_chat_outcome)
+    location.reload();
 }

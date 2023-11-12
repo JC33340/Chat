@@ -145,4 +145,11 @@ def remove_chat(request):
         LiveChats.objects.get(room_name = room_name).delete()
         return JsonResponse({"Outcome":"success"})
     return JsonResponse({"Outcome":"Incorrect method"})
+
+@csrf_exempt
+def save_chat(request):
+    if request.method == "POST":
+        return JsonResponse({"YEE":"YEE"})
+    else:
+        return JsonResponse({"Outcome":"Incorrect method"})
         

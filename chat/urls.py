@@ -15,5 +15,6 @@ urlpatterns = [
     path("create_chat", views.create_chat, name = "create_chat"),
     path("chat_room_info", views.chat_room_info, name = "chat_room_info"),
     path("my_chats_info", views.my_chats_info, name = "my_chats_info"),
-    path("remove_chat", views.remove_chat, name = "remove_chat")
+    path("remove_chat", views.remove_chat, name = "remove_chat"),
+    path("chat/save_chat/", views.save_chat, name = "save_chat")
 ]

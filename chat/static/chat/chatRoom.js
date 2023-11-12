@@ -36,4 +36,20 @@ document.addEventListener("DOMContentLoaded", ()=>{
         }))
         chat_message_input.value = '';
     })
+
+    document.getElementById("save_chat_button").addEventListener("click", ()=>{
+        save_chat(room_name)
+    })
 })
+
+async function save_chat(room_name){
+    console.log(room_name)
+    let outcome_json = await fetch("save_chat/",{
+        method: "post", 
+        body: JSON.stringify({
+            room_name: room_name
+        })
+    })
+    let outcome = await outcome_json.json()
+    console.log(outcome)
+}
