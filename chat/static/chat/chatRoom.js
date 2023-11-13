@@ -37,19 +37,31 @@ document.addEventListener("DOMContentLoaded", ()=>{
         chat_message_input.value = '';
     })
 
-    document.getElementById("save_chat_button").addEventListener("click", ()=>{
-        save_chat(room_name)
+    let save_status_button = document.getElementById("save_chat_button");
+    save_status_button.addEventListener("click", ()=>{
+        save_chat(room_name,save_status_button.getAttribute("save_action"))
     })
 })
 
-async function save_chat(room_name){
+async function save_chat(room_name,save_action){
     console.log(room_name)
+    let save_status_button = document.getElementById("save_chat_button");
+    if (save_action === "unsave"){
+        save_status_button.innerHTML = "Save"
+        save_status_button.setAttribute("save_action", "save")
+    }else if (save_action === "save"){
+        save_status_button.innerHTML = "Unsave"
+        save_status_button.setAttribute("save_action", "unsave")
+    };
+    
     let outcome_json = await fetch("save_chat/",{
         method: "post", 
         body: JSON.stringify({
-            room_name: room_name
+            room_name: room_name,
+            save_action: save_action
         })
     })
     let outcome = await outcome_json.json()
     console.log(outcome)
+    
 }

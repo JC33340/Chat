@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 import json
 
-from .models import User, LiveChats
+from .models import User, LiveChats, SavedChats
 # Create your views here.
 
 @login_required(login_url='login')
@@ -71,10 +71,18 @@ def chat_room(request, room_name):
                 "message": "Room Does Not Exist"
             })
         creator = User.objects.get(id=room_data["creator_id"])
-        if room_data["state"] == "private":
+        #saved status check
+        save_status = None
+        try:
+            SavedChats.objects.get(user_id = request.user, room_id = room_data['id'])
+            save_status = True
+        except ObjectDoesNotExist: 
+            save_stats = False    
+        if room_data["state"] == "private":          
             if request.user == creator:
                 return render(request, 'chat/chatRoom.html',{
-                    "room_name":room_name
+                    "room_name":room_name,
+                    "save_status": save_status
                 })
             try:
                 password = request.session[f'chat_room_{room_data["room_name"]}']
@@ -83,11 +91,13 @@ def chat_room(request, room_name):
                     "room_name":room_data["room_name"]
                 })
             return render(request, "chat/chatRoom.html", {
-                "room_name": room_name
+                "room_name": room_name,
+                "save_status": save_status
             })
         elif room_data["state"] == "public":
             return render(request, "chat/chatRoom.html", {
-                "room_name": room_name
+                "room_name": room_name,
+                "save_status": save_status
             })
     elif request.method == "POST":
         data = json.loads(request.body)
@@ -149,6 +159,12 @@ def remove_chat(request):
 @csrf_exempt
 def save_chat(request):
     if request.method == "POST":
+        data = json.loads(request.body)
+        save_action = data["save_action"]
+        room_name = data["room_name"]
+        livechats_room = LiveChats.objects.get(room_name = room_name)
+        
+        SavedChats.objects.create(room_id = livechats_room, user_id = request.user)
         return JsonResponse({"YEE":"YEE"})
     else:
         return JsonResponse({"Outcome":"Incorrect method"})

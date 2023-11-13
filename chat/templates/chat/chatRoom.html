@@ -7,7 +7,11 @@
 {% endblock %}
 
 {% block body %}
-<button id = "save_chat_button">Save</button>
+{% if save_status == True %}
+    <button id = "save_chat_button" save_action = 'unsave'>Unsave</button>
+{% elif save_status == False %}
+    <button id = "save_chat_button" save_action = "save">Save</button>
+{% endif %}
 <br>
 <input id = "chat_message_input" type = "text">
 <button type = "submit" id = "chat_message_submit">Send</button>
