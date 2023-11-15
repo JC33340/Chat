@@ -33,11 +33,17 @@ document.addEventListener("DOMContentLoaded", ()=>{
     document.getElementById("my_chats_navbar_link").addEventListener("click", ()=>{
         load_my_chats_page();
     })
+
+    //saved chats page
+    document.getElementById("saved_chats_navbar_link").addEventListener("click", ()=>{
+        clear_divs();
+        load_saved_chats_div();
+    })
 })
 
 // clearing all visible divs to start clean
 function clear_divs(){
-    document.querySelectorAll("#search_chat_wrapper_div, #create_chat_wrapper_div, #my_chats_wrapper_div").forEach(div => {
+    document.querySelectorAll("#search_chat_wrapper_div, #create_chat_wrapper_div, #my_chats_wrapper_div, #saved_chats_wrapper_div").forEach(div => {
         div.style.display = "none";
     })
 }
@@ -196,4 +202,15 @@ async function remove_chat(room_name){
     })
     let remove_chat_outcome = await remove_chat_outcome_json.json();
     location.reload();
+}
+
+async function load_saved_chats_div(){
+    document.getElementById("saved_chats_wrapper_div").style.display = "block";
+    let wrapper_div = document.getElementById("current_saved_chats_div");
+
+    let saved_chats_data_json = await fetch("saved_chats");
+    let saved_chats_data = await saved_chats_data_json.json();
+    saved_chats_data = saved_chats_data.data
+    console.log(saved_chats_data)
+    load_div_data(wrapper_div, saved_chats_data, "saved_chats")
 }

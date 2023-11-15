@@ -72,7 +72,7 @@ def chat_room(request, room_name):
             })
         creator = User.objects.get(id=room_data["creator_id"])
         #saved status check
-        save_status = None
+        save_status = False
         try:
             SavedChats.objects.get(user_id = request.user, room_id = room_data['id'])
             save_status = True
@@ -163,9 +163,20 @@ def save_chat(request):
         save_action = data["save_action"]
         room_name = data["room_name"]
         livechats_room = LiveChats.objects.get(room_name = room_name)
-        
-        SavedChats.objects.create(room_id = livechats_room, user_id = request.user)
-        return JsonResponse({"YEE":"YEE"})
+        if save_action == "save":
+            SavedChats.objects.create(room_id = livechats_room, user_id = request.user)
+        elif save_action == "unsave":
+            SavedChats.objects.get(room_id = livechats_room, user_id = request.user).delete()
+        return JsonResponse({"Outcome":"Process done"})
     else:
         return JsonResponse({"Outcome":"Incorrect method"})
-        
+    
+@csrf_exempt
+def saved_chats(request):
+        saved_chats_query = SavedChats.objects.filter(user_id = request.user).values()
+        saved_chats = []
+        for x in saved_chats_query:
+            chat = LiveChats.objects.filter(id = x["room_id_id"]).values()[0]
+            chat["creator_id"] = User.objects.filter(id = chat["creator_id"]).values()[0]["username"]
+            saved_chats.append(chat)
+        return JsonResponse({"data":saved_chats})
