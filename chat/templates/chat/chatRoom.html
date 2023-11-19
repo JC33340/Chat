@@ -4,17 +4,25 @@
 {% block title %}
 <title>Chat</title>
 <script src = "{% static 'chat/chatRoom.js' %}"></script>
+<link href = "{% static 'chat/chatRoom.css' %}" rel = "stylesheet">
 {% endblock %}
 
 {% block body %}
-{% if save_status == True %}
-    <button id = "save_chat_button" save_action = 'unsave'>Unsave</button>
-{% elif save_status == False %}
-    <button id = "save_chat_button" save_action = "save">Save</button>
-{% endif %}
+<div class = "chatroom-wrapper-div">
+    {% if save_status == True %}
+        <button id = "save_chat_button" save_action = 'unsave'>Unsave</button>
+    {% elif save_status == False %}
+        <button id = "save_chat_button" save_action = "save">Save</button>
+    {% endif %}
+    <br>
+    <textarea id = "chat_log" cols = "100" rows = "20" readonly></textarea>
+    <br>
+    <input id = "chat_message_input" type = "text">
+    <button type = "submit" id = "chat_message_submit">Send</button>
+</div>
 <br>
-<input id = "chat_message_input" type = "text">
-<button type = "submit" id = "chat_message_submit">Send</button>
-<textarea id = "chat_log" cols = "100" rows = "20" readonly></textarea>
+
+
 {{ room_name|json_script:"room_name" }}
+{{ username|json_script:"username"}}
 {% endblock %}

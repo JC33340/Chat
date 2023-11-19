@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", ()=>{
     const room_name = JSON.parse(document.getElementById("room_name").textContent);
-    
+    const username = JSON.parse(document.getElementById("username").textContent);
+
     const chat_message_input = document.querySelector("#chat_message_input");
+
+    load_past_messages(room_name)
 
     const chatSocket = new WebSocket(
         'ws://'
@@ -14,7 +17,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
         console.log(data)
-        document.querySelector("#chat_log").value += (data.message + '\n')
+        document.querySelector("#chat_log").value += ("Sent by: " + data.username + '\n' + data.message + '\n\n')
     };
 
     chatSocket.onclose = function (e) {
@@ -31,8 +34,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     document.querySelector("#chat_message_submit").addEventListener("click", ()=>{
         const message = chat_message_input.value;
+        if (message.trim() == ""){
+            return
+        }
         chatSocket.send(JSON.stringify({
-            'message': message
+            'message': message,
+            'username': username,
+            'room_name': room_name
         }))
         chat_message_input.value = '';
     })
@@ -64,4 +72,20 @@ async function save_chat(room_name,save_action){
     let outcome = await outcome_json.json()
     console.log(outcome)
     
+}
+
+async function load_past_messages(room_name){
+    let message_data_json = await fetch("past_chat_messages/",{
+        method:"post",
+        body: JSON.stringify({
+            room_name:room_name
+        })
+    });
+    let message_data = await message_data_json.json();
+    past_messages = message_data.data;
+    console.log(past_messages);
+    let chat_log = document.getElementById("chat_log");
+    for(i=0;i<past_messages.length;i++){
+        chat_log.value += (`Sent by: ${past_messages[i].sender_id}\n${past_messages[i].message}\n\n`)
+    }
 }

@@ -22,3 +22,8 @@ class SavedChats(models.Model):
     room_id = models.ForeignKey(LiveChats, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     
+class Messages(models.Model):
+    chat = models.ForeignKey(LiveChats, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE) 
+    message = models.CharField(max_length=500)
+    time_sent = models.DateTimeField(auto_now_add = True)

@@ -1,0 +1,11 @@
+.chatroom-wrapper-div{
+    text-align: center;
+}
+
+.chatroom-wrapper-div #chat_log{
+    background-color: #D3D3D3;
+}
+
+.chatroom-wrapper-div #chat_message_input{
+    width: 50em;
+}

@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 import json
 
-from .models import User, LiveChats, SavedChats
+from .models import User, LiveChats, SavedChats, Messages
 # Create your views here.
 
 @login_required(login_url='login')
@@ -64,6 +64,7 @@ def logout_view(request):
 @csrf_exempt
 def chat_room(request, room_name):
     if request.method == "GET":
+        username = User.objects.filter(username = request.user).values()[0]['username']
         try:
             room_data = LiveChats.objects.filter(room_name = room_name).values()[0]
         except IndexError:
@@ -82,7 +83,8 @@ def chat_room(request, room_name):
             if request.user == creator:
                 return render(request, 'chat/chatRoom.html',{
                     "room_name":room_name,
-                    "save_status": save_status
+                    "save_status": save_status,
+                    "username": username
                 })
             try:
                 password = request.session[f'chat_room_{room_data["room_name"]}']
@@ -92,12 +94,14 @@ def chat_room(request, room_name):
                 })
             return render(request, "chat/chatRoom.html", {
                 "room_name": room_name,
-                "save_status": save_status
+                "save_status": save_status,
+                "username": username
             })
         elif room_data["state"] == "public":
             return render(request, "chat/chatRoom.html", {
                 "room_name": room_name,
-                "save_status": save_status
+                "save_status": save_status,
+                'username': username
             })
     elif request.method == "POST":
         data = json.loads(request.body)
@@ -180,3 +184,18 @@ def saved_chats(request):
             chat["creator_id"] = User.objects.filter(id = chat["creator_id"]).values()[0]["username"]
             saved_chats.append(chat)
         return JsonResponse({"data":saved_chats})
+
+@csrf_exempt
+def past_chat_messages(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        chat = LiveChats.objects.get(room_name = data["room_name"])
+        past_messages_query = Messages.objects.filter(chat = chat).values()
+        past_messages  = []
+        for x in past_messages_query:
+            x["sender_id"] = User.objects.filter(id = x["sender_id"]).values()[0]["username"]
+            past_messages.append(x)
+        print(past_messages)
+        return JsonResponse({"data":past_messages})
+    else:
+        return JsonResponse({"Error":"Incorrect calling method"})
