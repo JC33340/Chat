@@ -39,6 +39,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
         clear_divs();
         load_saved_chats_div();
     })
+
+    document.querySelector(".main-wrapper-div #search_chat_wrapper_div #search_chats_button").addEventListener("click", ()=>{
+        search_input_element = document.querySelector(".main-wrapper-div #search_chat_wrapper_div #search_chat_value");
+        let search_name = search_input_element.value;
+        search_input_element.value = "";
+        if (search_name.trim() === ""){
+            return
+        }   
+        search_chat(search_name);
+    })
 })
 
 // clearing all visible divs to start clean
@@ -48,7 +58,7 @@ function clear_divs(){
     })
 }
 
-// querying database and then seeing if chat can be created. Ensuring no names are crossed
+// querying database and then seeing if chat can be ccreated. Ensuring no names are crossed
 async function create_chat(){
     const chat_name_input = document.querySelector("body .main-wrapper-div #create_chat_wrapper_div #chat_name");
     const chat_name = chat_name_input.value;
@@ -213,4 +223,20 @@ async function load_saved_chats_div(){
     saved_chats_data = saved_chats_data.data
     console.log(saved_chats_data)
     load_div_data(wrapper_div, saved_chats_data, "saved_chats")
+}
+
+async function search_chat(search_name){
+    let chat_data_json = await fetch("chat_room_info",{
+        method: "post",
+        body: JSON.stringify({
+            chat_name: search_name
+        })
+    })
+    let chat_data = await chat_data_json.json()
+    chat_data = chat_data.chat_name
+    console.log(chat_data)
+    let wrapper_div = document.querySelector(".main-wrapper-div #search_chat_wrapper_div #current_live_chats_div")
+    wrapper_div.innerHTML = "";
+
+    load_div_data(wrapper_div, chat_data, "search_div")
 }

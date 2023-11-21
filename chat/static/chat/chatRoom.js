@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     load_past_messages(room_name)
 
-    const chatSocket = new WebSocket(
+    const chatSocket = new WebSocket( 
         'ws://'
         + window.location.host
         + '/ws/chat/'

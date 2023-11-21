@@ -130,16 +130,25 @@ def create_chat(request):
             return JsonResponse ({"available": "yes"})
         else:
             return JsonResponse ({"available": "no"})
-        
-def chat_room_info(request):
-    all_chats_data = LiveChats.objects.all().values()
-    all_chats = []
-    for chat in all_chats_data:
-        creator_username = User.objects.filter(id = chat["creator_id"]).values()[0]["username"]
-        chat["creator_id"] = creator_username
-        all_chats.append(chat)
 
-    return JsonResponse({"info":all_chats})
+@csrf_exempt   
+def chat_room_info(request):
+    if request.method == "GET":
+        all_chats_data = LiveChats.objects.all().values()
+        all_chats = []
+        for chat in all_chats_data:
+            creator_username = User.objects.filter(id = chat["creator_id"]).values()[0]["username"]
+            chat["creator_id"] = creator_username
+            all_chats.append(chat)
+        return JsonResponse({"info":all_chats})
+    elif request.method == "POST":
+        chat_name = json.loads(request.body)['chat_name']
+        chats_query = LiveChats.objects.filter(room_name__contains = chat_name).values()
+        chats = []
+        for x in chats_query:
+            x["creator_id"] = User.objects.filter(id = x["creator_id"]).values()[0]["username"]
+            chats.append(x)
+        return JsonResponse({"chat_name":chats})
 
 def my_chats_info(request):
     my_chats_data = LiveChats.objects.filter(creator = request.user).values()
