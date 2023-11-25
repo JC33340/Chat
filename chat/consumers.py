@@ -8,7 +8,7 @@ from .models import LiveChats, Messages, User
 class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
-    def create_chat(self, msg, sender,room_name):
+    def create_message(self, msg, sender,room_name):
         chat = LiveChats.objects.get(room_name = room_name)
         user = User.objects.get(username = sender)
         return Messages.objects.create(message = msg, sender = user, chat = chat)
@@ -44,6 +44,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = event["message"]
         username = event['username']
         room_name = event['room_name']
-        new_msg = await self.create_chat(message,username,room_name)
+        new_msg = await self.create_message(message,username,room_name)
         #send message to websocket
         await self.send(text_data = json.dumps({"message": message, 'username':username,'room_name':room_name}))
