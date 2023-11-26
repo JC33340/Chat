@@ -13,7 +13,7 @@ from .models import User, LiveChats, SavedChats, Messages
 
 @login_required(login_url='login')
 def index(request):
-    return render(request, "chat/index.html")
+    return render(request, "chat/index.html", {"page":"index"})
 
 
 
@@ -84,7 +84,8 @@ def chat_room(request, room_name):
                 return render(request, 'chat/chatRoom.html',{
                     "room_name":room_name,
                     "save_status": save_status,
-                    "username": username
+                    "username": username,
+                    "page":"chatroom"
                 })
             try:
                 password = request.session[f'chat_room_{room_data["room_name"]}']
