@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     const username = JSON.parse(document.getElementById("username").textContent);
 
     const chat_message_input = document.querySelector("#chat_message_input");
+    const textarea = document.querySelector("#chat_log");
 
     load_past_messages(room_name)
 
@@ -17,7 +18,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
         console.log(data)
-        document.querySelector("#chat_log").value += ("Sent by: " + data.username + '\n' + data.message + '\n\n')
+        textarea.value += ("Sent by: " + data.username + '\n' + data.message + '\n\n')
+        textarea.scrollTop = textarea.scrollHeight;
     };
 
     chatSocket.onclose = function (e) {
@@ -88,4 +90,5 @@ async function load_past_messages(room_name){
     for(i=0;i<past_messages.length;i++){
         chat_log.value += (`Sent by: ${past_messages[i].sender_id}\n${past_messages[i].message}\n\n`)
     }
+    chat_log.scrollTop = chat_log.scrollHeight;
 }
