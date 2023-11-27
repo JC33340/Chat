@@ -1,7 +1,7 @@
 # Chat
 
 ## Distinctiveness and Complexity
-I have produced a chat application, distinct from the other projects previous as instead of using REST APIs to communicate with the django server, in each of the chatrooms a websocket connection is opened allowing for continuous and real time communication between the front and backend. Therefore no refreshing is required allowing for people to communicate with each other through a constantly communicating open channel.There are a number of functions in the app giving it complexity. The user is allowed to create new private or public chatrooms, with the former requiring a password, each of the chat apps will be required to have a category, therefore specifying to other users the content of it. Other functions include saving chats which the user has an interest in, as well as viewing ones own chats. 
+I have produced a chat application, distinct from the other projects previous as instead of using REST APIs to communicate with the django server, in each of the chatrooms a websocket connection is opened allowing for continuous and real time communication between the front and backend. Therefore no refreshing is required allowing for people to communicate with each other through a constantly open channel.There are a number of functions in the app giving it complexity. The user is allowed to create new private or public chatrooms, with the former requiring a password, each of the chat apps will be required to have a category, therefore specifying to other users the content of it. Other functions include saving chats which the user has an interest in, as well as viewing ones own chats. 
 
 ### static/chat file
 Within this folder contains the css and Javascript content for the application. 
