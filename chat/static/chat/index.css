@@ -1,6 +1,23 @@
+body{
+    background-color: #7274a6;
+}
+
+#body button{
+    border: none;
+    border-radius: 5px;
+    padding:0.2em 0.5em; 
+    transition: all 0.5s ease-in-out;
+}
+
+#body button:hover{
+    background-color: #A6A472;
+    color: white;
+}
+
 .main-wrapper-div {
     text-align: center;
     padding: 20px;
+    color:white;
 }
 
 .main-wrapper-div #create_chat_wrapper_div .error-div, .main-wrapper-div #create_chat_wrapper_div .success-div{
@@ -20,18 +37,33 @@
 }
 
 .active-button{
-    background-color: black;
+    background-color: #A6A472;
     color: white;
 }
 
 .individual-chat-wrapper-div{
-    border: 1px solid black;
-    padding: 0.4em;
+    border-radius: 20px;
+    background-color: #728EA6;
+    padding: 1em;
     margin: 0.5em;
     overflow: auto;
+    display: flex;
 }
 
 .individual-chat-wrapper-div-divisions{
-    float:left;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     width: 50%;
+}
+
+#chat_log{
+    background: black;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+#save_chat_button{
+    margin-bottom: 10px;
 }
